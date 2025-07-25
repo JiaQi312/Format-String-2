@@ -19,4 +19,11 @@ The number of characters can be controlled by using %#c, where # is some number.
 
 The addresses are located at the end of the payload. For some reason, if you include the addresses at the front, the format specifiers won't be read properly. My guess is the null character (\x00) is the culprit for this. 
 
-
+The general format will be: 
+ - print a certain amount of characters (with %c)
+ - write into memory (with %n, referencing an address at the end)
+ - this is repeated as many times as needed
+ - memory addresses sit in the back
+ - *%hhn takes a byte of the total number of characters printed (in hex form) and writes it into memory (1 bytes, two hex digits)
+ - *padding characters could be included right before the addresses. Since each address takes exactly 8 bytes, and the stack goes in 8 byte chunks at a time, the rest of the payload needs to be a multipe of 8, so that the addresses are not misaligned
+ - Some parts of the address can be represented by printable characters (ex: @, `, e) while others are unprintable and so are written in a special hex notation (\x00 - null character)
