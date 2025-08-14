@@ -27,3 +27,26 @@ The general format will be:
  - *%hhn takes a byte of the total number of characters printed (in hex form) and writes it into memory (1 bytes, two hex digits)
  - *padding characters could be included right before the addresses. Since each address takes exactly 8 bytes, and the stack goes in 8 byte chunks at a time, the rest of the payload needs to be a multipe of 8, so that the addresses are not misaligned
  - Some parts of the address can be represented by printable characters (ex: @, `, e) while others are unprintable and so are written in a special hex notation (\x00 - null character)
+
+## My Answer
+Provided format string: 
+
+**b'%102c%20$llnc%21$hhn%5c%22$hhn%245c%23$hhnaaaaba`@@\x00\x00\x00\x00\x00c@@\x00\x00\x00\x00\x00a@@\x00\x00\x00\x00\x00b@@\x00\x00\x00\x00\x00'**
+
+- My offset was 14
+- Address of sus: 0x404060
+- Value to write: 0x67616c66
+
+  Breakdown:
+&nbsp;The payload order: 1)66 2)67 3)6c 4)61
+
+1. Payload writes 102 characters with %102c
+2. Writes the # of characters to the address found at the 20th stack position, %20$lln writes the whole number as a hex, I believe the %lln is used instead of %n for padding (mentioned earlier). 102 characters have been printed, translating to 66 in hex. 
+3. the c after the n increments the character count by 1 (66 -> 67)
+4. Writes the 67 using %21$hhn, the 21st position refers to the address c@@\x00\x00\x00\x00\x00, which is the position of the first two digits of sus
+5. %5c writes 5 more characters, count is now at 108 (6c in hex)
+6. 6c is written to the address of the 22nd position using %22$hhn (address is a@@\x00\x00\x00\x00\x00)
+7. %245c writes 245 characters, count is now 353 (in hex is 161)
+8. %23$hhn writes the first two hex digits of the character count (61) into the address found at the 23rd position (address = b@@\x00\x00\x00\x00\x00)
+9. aaaaba is more padding
+10. Addresses are now found here at the end
