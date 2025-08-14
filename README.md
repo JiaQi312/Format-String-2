@@ -41,12 +41,12 @@ Provided format string:
 &nbsp;The payload order: 1)66 2)67 3)6c 4)61
 
 1. Payload writes 102 characters with %102c
-2. Writes the # of characters to the address found at the 20th stack position, %20$lln writes the whole number as a hex, I believe the %lln is used instead of %n for padding (mentioned earlier). 102 characters have been printed, translating to 66 in hex. 
+2. Writes the # of characters to the address found at the 20th stack position, %20$lln writes the whole number as a hex, I believe the %lln is used instead of %n for padding (mentioned earlier). 102 characters have been printed, translating to 66 in hex. (sus = 0x 21 73 75 66)
 3. the c after the n increments the character count by 1 (66 -> 67)
-4. Writes the 67 using %21$hhn, the 21st position refers to the address c@@\x00\x00\x00\x00\x00, which is the position of the first two digits of sus
+4. Writes the 67 using %21$hhn, the 21st position refers to the address c@@\x00\x00\x00\x00\x00, which is the position of the first two digits of sus (sus = 0x 67 73 75 66)
 5. %5c writes 5 more characters, count is now at 108 (6c in hex)
-6. 6c is written to the address of the 22nd position using %22$hhn (address is a@@\x00\x00\x00\x00\x00)
+6. 6c is written to the address of the 22nd position using %22$hhn (address is a@@\x00\x00\x00\x00\x00) (sus = 0x 67 73 6c 66)
 7. %245c writes 245 characters, count is now 353 (in hex is 161)
-8. %23$hhn writes the first two hex digits of the character count (61) into the address found at the 23rd position (address = b@@\x00\x00\x00\x00\x00)
+8. %23$hhn writes the first two hex digits of the character count (61) into the address found at the 23rd position (address = b@@\x00\x00\x00\x00\x00) (sus = 0x 67 61 6c 66)
 9. aaaaba is more padding
 10. Addresses are now found here at the end
